@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document>
+  <CstmrCdtTrfInitn>
+    <GrpHdr><MsgId>DEMO-MSG-0001</MsgId></GrpHdr>
+    <PmtInf><CdtTrfTxInf>
+      <PmtId><EndToEndId>DEMO-E2E-0001</EndToEndId></PmtId>
+      <Amt><InstdAmt Ccy="EUR">125.50</InstdAmt></Amt>
+      <Dbtr><Nm>Example Debtor Ltd</Nm></Dbtr>
+      <Cdtr><Nm>Example Creditor Ltd</Nm></Cdtr>
+    </CdtTrfTxInf></PmtInf>
+  </CstmrCdtTrfInitn>
+</Document>

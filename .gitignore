@@ -1,0 +1,7 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+workflow.py.bak
+.venv/
+venv/
+.env
