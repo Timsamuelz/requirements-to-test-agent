@@ -1,104 +1,75 @@
 # Requirements-to-Test Agent
 
-A portfolio demo of a configurable AI-agent workflow for business analysis and QA. It converts a plain-language requirement into a structured user story, Gherkin acceptance criteria, and test cases. It also provides a deterministic validator for a small, synthetic ISO 20022-style payment XML example.
+A Python prototype exploring how business requirements can be transformed into structured user stories, acceptance criteria, and test scenarios, alongside illustrative payment XML validation.
 
-> **Scope note:** This is a learning/demo project, not a production banking system and not a full ISO 20022 schema validator. Examples are synthetic. Generated requirements must be reviewed by a person before use.
+## Business Problem
 
-## Features
-- Configurable workflow instructions in `agent/instructions.md`
-- Repeatable requirement-to-test workflow
-- Structured JSON output
-- Deterministic XML checks for required fields, amount, currency, and message identifiers
-- Unit tests and no API key required for the starter demo
-- Clearly documented extension point for a real LLM integration
+Business Analysts and Product Owners often need to translate business requirements into clear, testable specifications. For cross-border payments and ISO 20022 migration projects, unclear requirements and incomplete validation can create avoidable issues during development and testing.
 
-## Quick start
-Requires Python 3.10+.
+This project explores a small, transparent workflow to help structure requirements and demonstrate selected payment XML checks.
+
+## Project Capabilities
+
+### 1. Requirements Workflow
+- Accepts a business requirement as input.
+- Extracts the role, need, and benefit from a standard user story.
+- Produces draft acceptance criteria and test scenarios.
+- Flags the output for human review.
+
+### 2. Payment XML Validation
+- Checks whether XML is well-formed.
+- Checks selected required elements.
+- Checks that the payment amount is a positive decimal.
+- Checks that the currency code uses three uppercase letters.
+
+These are illustrative checks, not comprehensive ISO 20022, SWIFT CBPR+, or bank-specific validation rules.
+
+### 3. Automated Tests
+The project includes automated tests for user-story parsing and XML validation.
+
+Current test result: **4 tests passed.**
+
+## Technology
+- Python
+- XML parsing and validation
+- Python `unittest`
+- Git
+
+## Run the Project
+
+Run the requirements workflow:
 
 ```bash
-python -m venv .venv
-# macOS/Linux: source .venv/bin/activate
-# Windows PowerShell: .venv\\Scripts\\Activate.ps1
-pip install -r requirements.txt
-python main.py --requirement "As a payment operations analyst, I want invalid payment messages flagged before submission so that I can correct them."
-python main.py --validate-xml examples/payment.xml
-python -m unittest discover -s tests -v
+python3 main.py --requirement "As a payments analyst, I want cross-border payment amounts and currency codes validated so that invalid payments are identified before processing."
 ```
 
-## How it works
-1. Read a plain-language requirement.
-2. Apply the workflow policy in `agent/instructions.md`.
-3. Draft a user story, assumptions, Given/When/Then acceptance criteria, and test cases.
-4. Return JSON and mark human review as required.
-5. Separately run deterministic checks against the synthetic XML sample.
+Validate the example payment XML:
 
-**Transparency:** the included requirement workflow uses local template/heuristic logic and does not call an LLM. This makes the starter demo reproducible without credentials. Add a real model adapter only after selecting and testing a provider.
-
-## Example output shape
-```json
-{
-  "user_story": {
-    "role": "payment operations analyst",
-    "need": "flag invalid payment messages before submission",
-    "benefit": "correct them"
-  },
-  "assumptions": [],
-  "acceptance_criteria": [
-    {
-      "given": "a payment message is missing a required field",
-      "when": "the message is validated",
-      "then": "the validator reports the missing field"
-    }
-  ],
-  "test_cases": [],
-  "human_review_required": true
-}
+```bash
+python3 main.py --validate-xml examples/payment.xml
 ```
 
-## Project structure
-```text
-requirements-to-test-agent/
-├── agent/instructions.md
-├── examples/payment.xml
-├── tests/test_xml_validator.py
-├── main.py
-├── workflow.py
-├── xml_validator.py
-├── requirements.txt
-└── README.md
+Run the automated tests:
+
+```bash
+python3 -m unittest discover -s tests -v
 ```
 
-## Using Argon or another coding agent
-In the coding-agent environment you actually use:
-1. Ask it to read `agent/instructions.md`.
-2. Ask it to improve `workflow.py` while preserving the JSON output structure.
-3. Ask it to run `python -m unittest discover -s tests -v`.
-4. Inspect the diff and test output before accepting changes.
-5. Document the real tool and configuration you used.
+## Current Status and Limitations
 
-Do not claim an Argon integration, MCP server, hook, or automated agent execution unless you configure and test it in your own environment.
+This is an early-stage, local Python prototype. The requirements workflow uses deterministic templates; it does not currently call a large language model or connect to Argon.
 
-## Limitations and responsible use
-- XML checks are illustrative business-rule checks, not XSD validation or full CBPR+ compliance.
-- The local requirement workflow is not LLM-powered.
-- No payments are sent or processed against real customer data.
-- Human review is required before generated stories or tests are used downstream.
-- Do not upload confidential requirements or production payment data to unapproved services.
+The project does not implement full ISO 20022 schema validation, SWIFT CBPR+ rule validation, or production payment processing.
 
-## Demo script
-1. Run the requirement example.
-2. Explain the story, criteria, and test cases.
-3. Validate `examples/payment.xml`.
-4. Run unit tests.
-5. Empty a required XML element and rerun validation to show a failure.
-6. Explain the role of agent instructions and human approval.
+Generated requirements and test scenarios require review by a qualified person before being used in a real project.
 
-## Roadmap
-- [ ] Validate output against JSON Schema
-- [ ] Add an optional LLM adapter with explicit provider configuration
-- [ ] Add a small interactive UI
-- [ ] Add official ISO 20022 XSD validation
-- [ ] Add CI for pull requests
+## Potential Next Steps
+- Connect the workflow to an approved AI model.
+- Explore integration with Argon to orchestrate custom AI-agent workflows.
+- Add structured input and output validation.
+- Expand test coverage using representative payment scenarios.
+- Add applicable ISO 20022 schema and business-rule validation.
 
-## License
-MIT. See `LICENSE`.
+## Why This Project
+
+The prototype reflects an interest in combining Business Analysis, Product Ownership, requirements engineering, test design, and payment-domain knowledge to explore practical AI-assisted workflows.
